@@ -3,16 +3,12 @@
 
 int main()
 {
-
+    int mode = get_mode()
+    
 
     return 0;
 }
 
-
-
-int get_mode() {
-    return 0;
-}
 
 
 int formula() {
@@ -23,5 +19,5 @@ int formula() {
 
 
 int cycle(): {
-    ...
+    return 0;
 }
