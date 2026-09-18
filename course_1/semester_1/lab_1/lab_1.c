@@ -1,12 +1,14 @@
 #include <stdio.h>
 #include <math.h>
 #include <stdlib.h>
+#include <string.h>
 
 void formula();
 void cycle();
+int get_multiplyer(float start,float step,float end);
+int count_decimals(float val);
 
-int main()
-{
+int main(){
     int mode = 0;
     printf("Type 1 to enter the formula mode, 2 to enter the cycle mode: ");
     scanf("%d", &mode);
@@ -72,10 +74,14 @@ void formula(){
 void cycle(){
 
     int mode = 0;
-    printf("Type 1 to run the cycle on the initial values or type 2 to provide your own range of x, value of a, and step ∆x: ");
+    printf("Type 1 to run the cycle on the initial values or type 2 to provide your own range of x, value of a, and step_x: ");
     scanf("%d", &mode);
+    int c;
+    while ((c = getchar()) != '\n' && c != EOF);
 
-    float a,x,y;
+    float a, x, y, start, end, step;
+    char left_b, right_b;
+    int multiplyer = 1;
 
 
     if(mode !=1 && mode !=2){
@@ -84,30 +90,66 @@ void cycle(){
     } 
     else if (mode == 1){
         a = 1.5;
+        start = 0.1;
+        end = 1;
+        step = 0.1;
+        multiplyer = 10;
     }
-    
     else if (mode == 2){
-        printf("Enter a: ");
+        char range_str[100];///вичвчити
+        printf("Enter the range of x and step_x as '(a;b) c or [a;b] c' where a,b and c are float numbers (example: '(1.0;10.0) 3.0': ");
+        if (fgets(range_str, sizeof(range_str), stdin) == NULL) {
+        exit(EXIT_FAILURE);
+        }   
+
+        int parsed = sscanf(range_str, "%c%f;%f%c %f", &left_b, &start, &end, &right_b, &step);
+        if (parsed != 5){
+            fprintf(stderr, "Usage: enter the range of x and step_x as '(a;b) c or [a;b] c' where a,b and c are numbers (example: '(1;12.5) 3.25)'");
+            exit(EXIT_FAILURE);
+        }
+        else if (left_b != '(' && left_b != '[' || right_b != ')' && right_b != ']'){
+            fprintf(stderr, "Usage: use round or square brakets, example: '(1.5;10) 3' ");
+            exit(EXIT_FAILURE);
+        }
+
+        if(left_b == '('){
+            start += step;
+        }
+        else {
+        }
+        
+        if(right_b == ')'){
+            end -= step;
+        }
+        else {
+        }
+        multiplyer = get_multiplyer(start, step, end);
+        
+        printf("Enter the value of parameter a: ");
         if (scanf("%f", &a) != 1){
         fprintf(stderr, "Usage: enter a number\n");
         exit(EXIT_FAILURE);    
         }
-        printf("Enter the start of the range as '(x' where x is a number: ");
-        printf("Enter ∆x: ");
+
     }
+
+    int i_start = (int)roundf(start * multiplyer);
+    int i_end   = (int)roundf(end * multiplyer);
+    int i_step  = (int)roundf(step * multiplyer);
+
     printf("+-----------------+-----------------+\n");
-    printf("| %-15s | %-15s |\n", "x", "y");
+    printf("| %-15s | %-15s |\n", "ax", "y");
     printf("+-----------------+-----------------+\n");
-    for(int i = 1; i <= 10; i++){ ///ohh
-        x = i/10.0f;
+    for(int i = i_start; i <= i_end; i += i_step){ ///ohh
+        x = (float)i / multiplyer;
         float ax = a*x;
         
         if(ax < 1){
-            y = ax - log10f(ax);
-            printf("|%15.4g  | %15.4g |\n", ax, y );
+            y = ax - log10f(ax); ///ax>0
+            printf("|%15.4g  | %15.4g |\n", ax, y);
             printf("+-----------------+-----------------+\n");
         }
-        else if (ax == 1){
+        else if (fabsf(ax - 1.0f) <= 1e-5f * fmaxf(fabsf(ax), 1.0f)){
             y = 1;
             printf("|%15.4g  | %15.4g |\n", ax, y );
             printf("+-----------------+-----------------+\n");
@@ -120,4 +162,39 @@ void cycle(){
         
       
     }
+}
+
+int get_multiplyer(float start,float step,float end){
+    
+    int d_start = count_decimals(start);
+    int d_step  = count_decimals(step);
+    int d_end   = count_decimals(end);
+
+    int max_dec = d_start;
+    if (d_step > max_dec) max_dec = d_step;
+    if (d_end > max_dec)  max_dec = d_end;
+
+    int multiplier = 1;
+    for (int i = 0; i < max_dec; i++) {
+        multiplier *= 10;
+    }
+    return multiplier;
+}
+
+int count_decimals(float val){
+    char buf[64];
+
+    snprintf(buf, sizeof(buf), "%.6f", val);
+
+    int len = strlen(buf);
+    while (len > 0 && buf[len - 1] == '0') {
+        buf[--len] = '\0';
+    }
+
+    char *dot = strchr(buf, '.');
+    
+    if (dot == NULL) {
+        return 0;
+    }
+    return strlen(dot + 1);
 }
