@@ -79,7 +79,7 @@ void cycle(){
 
     float a, x, y, start, end, step;
     char left_b, right_b;
-    int multiplyer = 1;
+    int multiplier = 1;
 
 
     if(mode !=1 && mode !=2){
@@ -91,7 +91,7 @@ void cycle(){
         start = 0.1;
         end = 1;
         step = 0.1;
-        multiplyer = 10;
+        multiplier = 10;
     }
     else if (mode == 2){
         char range_str[100];
@@ -126,7 +126,7 @@ void cycle(){
         }
         else {
         }
-        multiplyer = get_multiplyer(start, step, end);
+        multiplier = get_multiplier(start, step, end);
         
         printf("Enter the value of parameter a: ");
         if (scanf("%f", &a) != 1){
@@ -136,15 +136,15 @@ void cycle(){
 
     }
 
-    int i_start = (int)roundf(start * multiplyer);
-    int i_end   = (int)roundf(end * multiplyer);
-    int i_step  = (int)roundf(step * multiplyer);
+    int i_start = (int)roundf(start * multiplier);
+    int i_end   = (int)roundf(end * multiplier);
+    int i_step  = (int)roundf(step * multiplier);
 
     printf("+-----------------+-----------------+\n");
     printf("| %-15s | %-15s |\n", "ax", "y");
     printf("+-----------------+-----------------+\n");
     for(int i = i_start; i <= i_end; i += i_step){ ///ohh
-        x = (float)i / multiplyer;
+        x = (float)i / multiplier;
         float ax = a*x;
         
         if(ax < 1){
