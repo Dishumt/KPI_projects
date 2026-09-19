@@ -94,7 +94,7 @@ void cycle(){
         multiplyer = 10;
     }
     else if (mode == 2){
-        char range_str[100];///вичвчити
+        char range_str[100];
         printf("Enter the range of x and step_x as '(a;b) c or [a;b] c' where a,b and c are float numbers (example: '(1.0;10.0) 3.0': ");
         if (fgets(range_str, sizeof(range_str), stdin) == NULL) {
         exit(EXIT_FAILURE);
@@ -105,6 +105,11 @@ void cycle(){
             fprintf(stderr, "Usage: enter the range of x and step_x as '(a;b) c or [a;b] c' where a,b and c are numbers (example: '(1;12.5) 3.25)'");
             exit(EXIT_FAILURE);
         }
+        else if (end<=start){
+            fprintf(stderr, "The end of the range must be greater than the start");
+            exit(EXIT_FAILURE);
+        }
+        
         else if (left_b != '(' && left_b != '[' || right_b != ')' && right_b != ']'){
             fprintf(stderr, "Usage: use round or square brakets, example: '(1.5;10) 3' ");
             exit(EXIT_FAILURE);
