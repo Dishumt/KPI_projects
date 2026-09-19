@@ -13,7 +13,7 @@ int main(){
     printf("Type 1 to enter the formula mode, 2 to enter the cycle mode: ");
     scanf("%d", &mode);
 
-    if(mode == 1){
+    if(mode == 1){  
         formula();
     } 
     else if (mode == 2){
@@ -44,7 +44,7 @@ void formula(){
     } 
     else if (mode == 1){
         a = -0.92;
-        b = 0.58;  
+        b = 0.58;
     }
     
     else if (mode == 2){
@@ -52,20 +52,18 @@ void formula(){
         scanf("%f", &a);
         printf("Enter b: ");
         scanf("%f", &b);
+        if(b <= 0){
+            fprintf(stderr, "there is an operation ln(b) in the formula, b must be greater than 0");
+            exit(EXIT_FAILURE);
+        }
     }
 
 
         x = pow(fabs(cos(fabs(a)) + cos(b)), (1 - 2*pow(sin(b), 2)));
         printf("x = %.4f\n", x);
-
-        if(b > 0){
-            ///y = log(pow(b, -sqrt(fabs(a)))) * (a - b/2.0) -> y = -sqrt(fabs(a)) * log(b) * (a - b/2.0)
-            y = -sqrt(fabs(a)) * log(b) * (a - b/2.0);
-            printf("y = %.4f", y);
-        }
-        else{
-            printf("there is an operation ln(b) in the formula, b cannot be equal to 0)");
-        }
+        ///y = log(pow(b, -sqrt(fabs(a)))) * (a - b/2.0) -> y = -sqrt(fabs(a)) * log(b) * (a - b/2.0)
+        y = -sqrt(fabs(a)) * log(b) * (a - b/2.0);
+        printf("y = %.4f", y);
 }
 
 
