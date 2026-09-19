@@ -5,7 +5,7 @@
 
 void formula();
 void cycle();
-int get_multiplyer(float start,float step,float end);
+int get_multiplier(float start,float step,float end);
 int count_decimals(float val);
 
 int main(){
@@ -167,7 +167,7 @@ void cycle(){
     }
 }
 
-int get_multiplyer(float start,float step,float end){
+int get_multiplier(float start,float step,float end){
     
     int d_start = count_decimals(start);
     int d_step  = count_decimals(step);
