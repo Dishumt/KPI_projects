@@ -35,9 +35,7 @@ void formula(){
     scanf("%d", &mode);
 
     float a,b,x,y;
-    
-
-
+ 
     if(mode !=1 && mode !=2){
         fprintf(stderr, "Usage: type 1 to run the formula on the initial values or type 2 to provide your own!");
         exit(EXIT_FAILURE);
@@ -95,7 +93,7 @@ void cycle(){
     }
     else if (mode == 2){
         char range_str[100];
-        printf("Enter the range of x and step_x as '(a;b) c or [a;b] c' where a,b and c are float numbers (example: '(1.0;10.0) 3.0': ");
+        printf("Enter the range of x and step_x as '(a;b) c or [a;b] c' where a,b and c are numbers (example: '(1;10) 3': ");
         if (fgets(range_str, sizeof(range_str), stdin) == NULL) {
         exit(EXIT_FAILURE);
         }   
@@ -121,11 +119,7 @@ void cycle(){
         else {
         }
         
-        if(right_b == ')'){
-            end -= step;
-        }
-        else {
-        }
+        
         multiplier = get_multiplier(start, step, end);
         
         printf("Enter the value of parameter a: ");
@@ -133,9 +127,11 @@ void cycle(){
         fprintf(stderr, "Usage: enter a number\n");
         exit(EXIT_FAILURE);    
         }
+        
 
     }
 
+    int is_exclusive = (right_b == ')');
     int i_start = (int)roundf(start * multiplier);
     int i_end   = (int)roundf(end * multiplier);
     int i_step  = (int)roundf(step * multiplier);
@@ -143,7 +139,7 @@ void cycle(){
     printf("+-----------------+-----------------+\n");
     printf("| %-15s | %-15s |\n", "ax", "y");
     printf("+-----------------+-----------------+\n");
-    for(int i = i_start; i <= i_end; i += i_step){ ///ohh
+    for(int i = i_start; (is_exclusive ? i < i_end: i <= i_end); i += i_step){ ///ohh
         x = (float)i / multiplier;
         float ax = a*x;
         
