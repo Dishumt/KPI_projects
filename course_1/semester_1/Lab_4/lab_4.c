@@ -29,50 +29,28 @@ int main(void) {
 }
 
 void get_values(float *S1, float *S2, int *K1, int *K2) {
-    int capn = 4, capp = 4, nn = 0, np = 0;
+    int nn = 0, np = 0;
     float x;
-
-    float *arrn = malloc(capn * sizeof(*arrn));
-    if (arrn == NULL) {
-        fprintf(stderr, "memory allocation failed\n");
-        return;
-    }
-    float *arrp = malloc(capp * sizeof(*arrp));
-    if (arrp == NULL) {
-        fprintf(stderr, "memory allocation failed\n");
-        free(arrn);
-        return;
-    }
 
     printf("Enter the numbers one by one, enter 'd' to stop:\n");
 
     while (1) {
         int r = scanf("%f", &x);
         if (r == 1) {
-            if (x > 0) {                 
-                if (np == capp) {
-                    capp *= 2;
-                    float *tmp = realloc(arrp, capp * sizeof(*tmp));
-                    if (tmp == NULL) { free(arrp); free(arrn); return; }
-                    arrp = tmp;
-                }
-                arrp[np++] = x;
+            if (x > 0) {
                 *S1 += x;
-                *K1 = np;
-            } else if (x < 0) {  
-                if (nn == capn) {
-                    capn *= 2;
-                    float *tmp = realloc(arrn, capn * sizeof(*tmp));
-                    if (tmp == NULL) { free(arrp); free(arrn); return; }
-                    arrn = tmp;
-                }
-                arrn[nn++] = x;
+                (*K1)++;
+                
+            } 
+            else if (x < 0) {
                 *S2 += x;
-                *K2 = nn;
+                (*K2)++;
             }
-        } else if (r == EOF) {
+        }
+        else if (r == EOF) {
             break;
-        } else {
+        } 
+        else {
             char c;
             scanf(" %c", &c);
             if (c == 'd' || c == 'D')
@@ -81,9 +59,6 @@ void get_values(float *S1, float *S2, int *K1, int *K2) {
             while (getchar() != '\n');
         }
     }
-
-    free(arrp);
-    free(arrn);
 }
 
 void formula(float *S1, float *S2, int *K1, int *K2, float *Z) {
