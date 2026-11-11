@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <math.h>
 #include <stdlib.h>
-
+            
 void calculate_sum(float x, float eps);
 
 int main() {
